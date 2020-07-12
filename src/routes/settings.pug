@@ -1,0 +1,11 @@
+html
+  head
+    title Cnvrg Settings
+  body
+    h1
+      | Settings #{settings.isLocked() ? ' [Locked]' : ''}
+    unless settings.isLocked()
+      form(action='settings/lock', method='post')
+        button(type='submit') Lock
+    form(action='settings/reload', method='post')
+      button(type='submit') Reload from disk

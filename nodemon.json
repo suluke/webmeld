@@ -1,0 +1,4 @@
+{
+  "verbose": true,
+  "ignore": ["cnvrg_settings.json"]
+}
