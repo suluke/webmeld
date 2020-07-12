@@ -2,10 +2,24 @@ html
   head
     title Cnvrg Settings
   body
-    h1
-      | Settings #{settings.isLocked() ? ' [Locked]' : ''}
+    h1 Settings #{settings.isLocked() ? ' [Locked]' : ''}
+    form(action=baseUrl, method='post')
+      h2 Directories
+      ul(id='directories')
+        unless settings.read('directories') === null
+          each directory, index in settings.read('directories')
+            li
+              if settings.isLocked()
+                | #{directory}
+              else
+                input(name='directories.'+index, value=directory)
+      unless settings.isLocked()
+        button(type='button', onclick='const ul = document.getElementById("directories"); const li = document.createElement("li"); li.innerHTML = `<input name="directories.${ul.childNodes.length}"></input>`; ul.appendChild(li);')
+          | Add
+        button(type='submit') Save
+    hr
     unless settings.isLocked()
-      form(action='settings/lock', method='post')
+      form(action=baseUrl+'/lock', method='post')
         button(type='submit') Lock
-    form(action='settings/reload', method='post')
+    form(action=baseUrl+'/reload', method='post')
       button(type='submit') Reload from disk

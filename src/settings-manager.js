@@ -20,8 +20,8 @@ export default class SettingsManager {
   isLocked() {
     return this.itsSettings.locked;
   }
-  read(key) {
-    return this._copy(this._access(this._parsePath(key)));
+  read(key, type = null) {
+    return this._copy(this._access(this._parsePath(key), type));
   }
   async write(key, value) {
     if (this.itsSettings.locked) {
@@ -29,7 +29,7 @@ export default class SettingsManager {
     }
     const path = this._parsePath(key);
     const name = path.pop();
-    const parent = this._access(path, isNaN(name));
+    const parent = this._access(path, isNaN(name)? Object : Array);
     parent[name] = this._copy(value);
     return this._persist();
   }
@@ -38,7 +38,7 @@ export default class SettingsManager {
       throw new Error(`Cannot push to setting ${key}: Settings are locked`);
     }
     const path = this._parsePath(key);
-    const array = this._access(path, false);
+    const array = this._access(path, Array);
     if (!Array.isArray(array)) {
       throw new Error(`Cannot push to ${key}: Not a list`);
     }
@@ -54,13 +54,17 @@ export default class SettingsManager {
     return true;
   }
 
-  _access(path, preferObject = true) {
+  _access(path, type = Object) {
     const worklist = path.slice();
     let current = this.itsSettings.settings;
     while (worklist.length > 0) {
       const item = worklist.shift();
       if (current[item] === undefined) {
-        if ((worklist.length === 0 && preferObject) || (worklist.length > 0 && isNaN(worklist[0]))) {
+        if (type === null)
+          return null;
+        if (worklist.length === 0) {
+          current[item] = type === null ? null : new type();
+        } else if (isNaN(worklist[0])) {
           current[item] = {};
         } else {
           current[item] = [];
