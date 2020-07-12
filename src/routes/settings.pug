@@ -5,7 +5,7 @@ html
     h1 Settings #{settings.isLocked() ? ' [Locked]' : ''}
     form(action=baseUrl, method='post')
       h2 Directories
-      ul(id='directories')
+      ul#directories
         unless settings.read('directories') === null
           each directory, index in settings.read('directories')
             li
@@ -13,8 +13,9 @@ html
                 | #{directory}
               else
                 input(name='directories.'+index, value=directory)
+                button.directory-delete(type='button') x
       unless settings.isLocked()
-        button(type='button', onclick='const ul = document.getElementById("directories"); const li = document.createElement("li"); li.innerHTML = `<input name="directories.${ul.childNodes.length}"></input>`; ul.appendChild(li);')
+        button#directory-add(type='button')
           | Add
         button(type='submit') Save
     hr
@@ -23,3 +24,21 @@ html
         button(type='submit') Lock
     form(action=baseUrl+'/reload', method='post')
       button(type='submit') Reload from disk
+    script(type='text/javascript').
+      const dirAddBtn = document.getElementById('directory-add');
+      if (dirAddBtn) {
+        dirAddBtn.addEventListener('click', function() {
+          const ul = document.getElementById("directories");
+          const li = document.createElement("li");
+          li.innerHTML = `
+            <input name="directories.${ul.childNodes.length}"></input>
+            <button type="button" class="directory-delete">x</button>
+          `;
+          ul.appendChild(li);
+        }, false);
+      }
+      document.getElementById('directories').addEventListener('click', function(event) {
+        if (event.target.tagName === 'BUTTON' && event.target.classList.contains('directory-delete')) {
+          event.target.parentElement.parentElement.removeChild(event.target.parentElement);
+        }
+      }, false);

@@ -14,6 +14,7 @@ export default function Settings() {
   });
   router.post('/', function(req, res) {
     if (!req.app.locals.settings.isLocked()) {
+      req.app.locals.settings.write('directories', []);
       for (let key of Object.keys(req.body)) {
         if (!validateKey(key)) {
           console.log(`Unknown option: ${key}. SKIPPING`);
