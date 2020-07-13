@@ -1,5 +1,6 @@
 import SettingsManager from './settings-manager.js'
 import SettingsRoute from './routes/settings.js'
+import DiffRoute from './routes/diff.js'
 
 import bodyParser from 'body-parser';
 import express from 'express';
@@ -11,8 +12,6 @@ export default function Cnvrg() {
   server.set('view engine', 'pug');
   server.set('views', 'src/routes');
   server.use('/settings', SettingsRoute());
-  server.get('/', function(req, res) {
-    res.redirect('/settings');
-  });
+  server.use('/', DiffRoute());
   return server;
 };

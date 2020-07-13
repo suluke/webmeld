@@ -2,9 +2,11 @@ html
   head
     title Cnvrg Settings
   body
-    h1 Settings #{settings.isLocked() ? ' [Locked]' : ''}
+    h1
+      a(href='/') Cnvrg
+    h2 Settings #{settings.isLocked() ? ' [Locked]' : ''}
     form(action=baseUrl, method='post')
-      h2 Directories
+      h3 Directories
       ul#directories
         unless settings.read('directories') === null
           each directory, index in settings.read('directories')

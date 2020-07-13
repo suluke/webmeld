@@ -1,0 +1,17 @@
+extends layout.pug
+block content
+  a(href='/settings') Settings
+  table
+    tbody
+      unless path === '/diff'
+        tr
+          td
+            a(href='..') ..
+      each dir in contents.directories
+        tr
+          td
+            a(href=baseUrl+path+'/'+dir.itsName) &#128193; #{dir.itsName}
+      each file in contents.files
+        tr
+          td
+            a(href=baseUrl+path+'/'+file.itsName) &#128196; #{file.itsName}

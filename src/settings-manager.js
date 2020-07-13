@@ -82,7 +82,7 @@ export default class SettingsManager {
   }
   async _persist() {
     return new Promise((resolve, reject) => {
-      jsonfile.writeFile(this.itsPersistPath, this.itsSettings, function(err) {
+      jsonfile.writeFile(this.itsPersistPath, this.itsSettings, { spaces: 2 }, function(err) {
         if (err) {
           reject(err);
         } else {
