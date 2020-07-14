@@ -4,7 +4,7 @@ import process from 'process'
 
 export default class SettingsManager {
   constructor() {
-    this.itsPersistPath = path.join(path.dirname(process.argv[1]), 'cnvrg_settings.json');
+    this.itsPersistPath = path.join(path.dirname(process.argv[1]), 'webmeld_settings.json');
     this.itsSettings = {
       'settings' : {},
       'locked': false

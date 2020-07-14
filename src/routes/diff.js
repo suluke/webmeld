@@ -1,6 +1,7 @@
 import express from 'express';
 import fs, { read } from 'fs';
 import path from 'path';
+import process from 'process'
 import util from 'util';
 
 const readdir = util.promisify(fs.readdir);
@@ -39,6 +40,7 @@ export default function Diff() {
         files: {}
       };
       const pathparam = req.path === '/' ? '' : req.path.substring(5);
+      console.log(pathparam);
       let mainPath = path.resolve(path.join(dirs[0], pathparam));
       if (mainPath.indexOf(dirs[0]) !== 0) {
         // TODO make this an error?
@@ -80,9 +82,18 @@ export default function Diff() {
           const content = await readFile(filepath);
           contents.push(content);
         }
-        res.render('diff-file', { baseDirs: dirs, contents, path: (req.path === '/' ? '/diff' : req.path), baseUrl: req.baseUrl });
+        res.render('diff-file', { baseDirs: dirs, contents, fileExt: path.extname(pathparam).substring(1), path: (req.path === '/' ? '/diff' : req.path), baseUrl: req.baseUrl });
       }
     }
+  });
+  router.get('/static/diff.min.js', function(req, res) {
+    res.sendFile(path.join(path.dirname(process.argv[1]), 'node_modules', 'diff', 'dist', 'diff.min.js'));
+  });
+  router.get('/static/highlight.min.js', function(req, res) {
+    res.sendFile(path.join(path.dirname(process.argv[1]), 'node_modules', '@highlightjs', 'cdn-assets', 'highlight.min.js'));
+  });
+  router.get('/static/highlight/default.css', function(req, res) {
+    res.sendFile(path.join(path.dirname(process.argv[1]), 'node_modules', '@highlightjs', 'cdn-assets', 'styles', 'default.min.css'));
   });
   return router;
 };

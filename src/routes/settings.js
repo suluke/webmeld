@@ -33,7 +33,7 @@ export default function Settings() {
   });
   router.post('/reload', function(req, res) {
     req.app.locals.settings.load();
-    res.redirect('..')
+    res.redirect('/settings')
   });
   return router;
 };

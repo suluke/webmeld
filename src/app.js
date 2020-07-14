@@ -5,7 +5,7 @@ import DiffRoute from './routes/diff.js'
 import bodyParser from 'body-parser';
 import express from 'express';
 
-export default function Cnvrg() {
+export default function WebMeld() {
   const server = express();
   server.use(bodyParser.urlencoded({ extended: false }));
   server.locals.settings = new SettingsManager();

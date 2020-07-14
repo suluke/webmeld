@@ -1,4 +1,4 @@
 {
   "verbose": true,
-  "ignore": ["cnvrg_settings.json"]
+  "ignore": ["webmeld_settings.json"]
 }
